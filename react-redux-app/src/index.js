@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { reducer } from './redux/reducers/mainReducer'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import logger from 'redux-logger'
+
+const store = createStore(reducer, applyMiddleware(logger))
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}><App /></Provider>,
   document.getElementById('root')
 );
 
