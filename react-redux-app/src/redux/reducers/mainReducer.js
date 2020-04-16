@@ -2,18 +2,18 @@ import actionTypes from '../actions/actionTypes'
 
 export const initialState = () => ({
   isLoading: false,
-  pokemon: '',
+  pokemonName: '',
+  pokemon: null,
   error: ''
 })
 
 export const reducer = (state = initialState(), action) => {
   switch(action.type) {
     case actionTypes.FETCH_POKEMON_DATA_START:
-      console.log('pokemn data start')
+      console.log('pokemon data start')
       return {
         ...state,
         isLoading: true,
-        pokemon: action.payload.data,
         error: ''
       }
     case actionTypes.FETCH_POKEMON_DATA_SUCCESS:
@@ -21,6 +21,7 @@ export const reducer = (state = initialState(), action) => {
       return {
         ...state,
         isLoading: false,
+        pokemonName: '',
         pokemon: action.payload.data
       }
     case actionTypes.FETCH_POKEMON_DATA_ERROR:
@@ -28,8 +29,13 @@ export const reducer = (state = initialState(), action) => {
       return {
         ...state,
         isLoading: false,
-        pokemon: {},
+        pokemon: null,
         error: action.payload.response.data
+      }
+    case actionTypes.UPDATE_POKEMON_NAME:
+      return {
+        ...state,
+        pokemonName: action.payload
       }
     default:
       return state

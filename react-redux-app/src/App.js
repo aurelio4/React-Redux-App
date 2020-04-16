@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React from 'react'
 import PokemonInput from './components/PokemonInput'
 import PokemonDisplay from './components/PokemonDisplay'
 import ErrorDisplay from './components/ErrorDisplay'
 import { connect } from 'react-redux'
-import { fetchPokemonDataStart, fetchPokemonDataSuccess, fetchPokemonDataError } from './redux/actions/actionCreators'
+import { updatePokemonName, getPokemon } from './redux/actions/actionCreators'
 import {
   Container,
   Row,
@@ -12,36 +11,22 @@ import {
 } from 'reactstrap'
 
 function App(props) {
-  const [pokemon, setPokemon] = useState('')
-
-  const getPokemon = () => {
-    props.fetchPokemonDataStart(pokemon)
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
-      .then(res => {
-        console.log(res)
-        props.fetchPokemonDataSuccess(res)
-      })
-      .catch(err => {
-        props.fetchPokemonDataError(err)
-      })
-  }
-
   const handleChange = e => {
-    setPokemon(e.target.value)
+    props.updatePokemonName(e.target.value)
   }
 
   return(
     <>
       <Container>
         <Row>
-          <Col><PokemonInput user={pokemon} handleChange={handleChange} getPokemon={getPokemon} /></Col>
+          <Col><PokemonInput user={props.pokemonName} handleChange={handleChange} getPokemon={props.getPokemon} pokemonName={props.pokemonName} /></Col>
         </Row>
       </Container>
       <Container>
         <Row>
           {props.error
           ? <ErrorDisplay error={props.error} />
-          : props.pokemon ? <PokemonDisplay pokemon={props.pokemon} /> : ''
+          : props.pokemon ? <PokemonDisplay pokemon={props.pokemon} /> : null
           }
         </Row>
       </Container>
@@ -58,4 +43,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { fetchPokemonDataStart, fetchPokemonDataSuccess, fetchPokemonDataError })(App)
+export default connect(mapStateToProps, { updatePokemonName, getPokemon })(App)
